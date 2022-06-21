@@ -23,23 +23,32 @@ public class Setting {
     @Column(updatable = false)
     private Integer id;
 
-    @NotNull
     private String key;
-    @NotNull
+
     private String value;
 
-    @Column(updatable = false)
     @CreationTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private Date createdAt;
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createTime;
 
     @UpdateTimestamp
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private Date updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateTime;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JoinTable(name = "setting_user",
+            joinColumns = @JoinColumn(name = "setting_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
+
+    @PreRemove
+    public void removeUser(){
+        for (User u: users) {
+            u.getSettings().remove(this);
+        }
+    }
+
 
     /*
     public void removeUser(User user){

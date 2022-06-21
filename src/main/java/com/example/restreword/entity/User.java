@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -23,15 +24,20 @@ public class User {
 
     private String name;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    @JsonFormat(pattern = "dd-MM-YYYY")
-    private Date birthDate;
+    private LocalDate birthDate;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Setting> settings;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
+
+    @PreRemove
+    public void removeUser(){
+        for (Setting s: settings) {
+            s.getUsers().remove(this);
+        }
+    }
 
     /*
     public void removeSetting(Setting setting){

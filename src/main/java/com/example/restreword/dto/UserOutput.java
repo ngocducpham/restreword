@@ -1,6 +1,7 @@
 package com.example.restreword.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,17 +17,16 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserOutput {
     private Integer id;
 
-    @Size(min=2, message="Name should have at least 2 characters")
-    @NotNull
     private String name;
 
-    @NotNull
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    @JsonFormat(pattern = "dd-MM-YYYY")
-    private Date birthDay;
+    //@JsonFormat(pattern = "dd-MM-yyyy")
+    //private Date birthDate;
+    private Integer age;
 
-    private List<UserSettingDTO> userSettings;
+    @JsonIgnore
+    private List<SettingOutput> settings;
+    private List<PostOutput> posts;
 }

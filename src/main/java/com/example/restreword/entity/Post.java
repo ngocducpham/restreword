@@ -18,11 +18,9 @@ public class Post {
     @Column(updatable = false)
     private Integer id;
 
-    @NotNull
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private User user;
 
 }

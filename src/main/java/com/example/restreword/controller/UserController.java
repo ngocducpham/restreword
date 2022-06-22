@@ -1,15 +1,20 @@
 package com.example.restreword.controller;
 
+import com.example.restreword.common.ResponseTemplate;
+import com.example.restreword.dto.PostOutput;
 import com.example.restreword.dto.UserInput;
+import com.example.restreword.dto.UserOutput;
 import com.example.restreword.repo.UserRepository;
 import com.example.restreword.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -20,12 +25,22 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<Object> retrieveAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+        return ResponseEntity.ok(ResponseTemplate
+                .builder()
+                .result(true)
+                .message("OK")
+                .data(userService.findAll())
+                .build());
     }
 
     @GetMapping("{id}")
     public ResponseEntity<Object> retrieveUser(@PathVariable int id) {
-        return ResponseEntity.ok(userService.findOne(id));
+        return ResponseEntity.ok(ResponseTemplate
+                .builder()
+                .result(true)
+                .message("OK")
+                .data(userService.findOne(id))
+                .build());
     }
 
     @PostMapping()
@@ -37,18 +52,35 @@ public class UserController {
                 .path("/{id}")
                 .buildAndExpand(userId).toUri();
 
-        return ResponseEntity.created(uri).build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("location", uri.toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body((ResponseTemplate
+                        .builder()
+                        .result(true)
+                        .message("OK")
+                        .build()));
     }
 
     @PatchMapping("{id}")
     public ResponseEntity<Object> updateUser(@PathVariable Integer id, @Valid @RequestBody UserInput userInput) {
         userService.update(id, userInput);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ResponseTemplate
+                .builder()
+                .result(true)
+                .message("OK")
+                .build());
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable int id) {
         userService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ResponseTemplate
+                .builder()
+                .result(true)
+                .message("OK")
+                .build());
     }
 }

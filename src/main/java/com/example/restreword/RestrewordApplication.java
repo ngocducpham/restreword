@@ -1,6 +1,7 @@
 package com.example.restreword;
 
 
+import com.example.restreword.common.ResponseTemplate;
 import com.example.restreword.entity.Post;
 import com.example.restreword.entity.Setting;
 import com.example.restreword.repo.PostRepository;

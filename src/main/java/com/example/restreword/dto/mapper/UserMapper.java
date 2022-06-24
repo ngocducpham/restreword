@@ -11,12 +11,11 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-@Mapper(uses = {PostMapper.class, SettingMapper.class}, componentModel = "spring")
+@Mapper(uses = {PostMapper.class, SettingMapper.class, RoleMapper.class}, componentModel = "spring")
 public abstract class UserMapper {
     public abstract UserInput toInputDto(User user);
 
     @Mapping(target = "age", source = "birthDate", qualifiedByName = "ageCalculator")
-
     public abstract UserOutput toOutputDto(User user);
 
     public abstract User inputToEntity(UserInput user);

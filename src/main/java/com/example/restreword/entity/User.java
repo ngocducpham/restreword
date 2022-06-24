@@ -24,15 +24,18 @@ public class User {
 
     private String name;
 
+    private String password;
+
     private LocalDate birthDate;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users", cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Setting> settings;
+
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+    private List<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
-
-
 
     @PreRemove
     public void removeUser(){

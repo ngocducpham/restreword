@@ -25,8 +25,7 @@ public class UserOutput {
     //@JsonFormat(pattern = "dd-MM-yyyy")
     //private Date birthDate;
     private Integer age;
-
-    @JsonIgnore
     private List<SettingOutput> settings;
     private List<PostOutput> posts;
+    private List<RoleOutput> roles;
 }

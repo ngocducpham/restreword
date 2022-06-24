@@ -2,20 +2,13 @@ package com.example.restreword.controller;
 
 import com.example.restreword.common.ResponseTemplate;
 import com.example.restreword.dto.SettingInput;
-import com.example.restreword.dto.SettingOutput;
-import com.example.restreword.repo.SettingRepository;
-import com.example.restreword.entity.User;
-import com.example.restreword.exception.UserNotFoundException;
-import com.example.restreword.repo.UserRepository;
 import com.example.restreword.service.SettingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,18 +18,16 @@ public class SettingController {
 
     @GetMapping
     public ResponseEntity<Object> retrieveAllSetting(@PathVariable Integer userId) {
-        return ResponseEntity.ok(ResponseTemplate
-                .builder()
-                .result(true)
-                .message("OK")
-                .data(settingService.findAll(userId))
-                .build());
+        return ResponseTemplate.success(settingService.findAll(userId));
 
     }
 
     @PostMapping()
     public ResponseEntity<Object> createSetting(@PathVariable Integer userId, @Valid @RequestBody SettingInput settingInput) {
-        return ResponseEntity.status(settingService.create(userId, settingInput)).build();
+        HttpStatus status =settingService.create(userId, settingInput);
+        if(status == HttpStatus.OK)
+            return ResponseTemplate.success();
+        else return ResponseTemplate.fail("False", status);
     }
 
     @PatchMapping()

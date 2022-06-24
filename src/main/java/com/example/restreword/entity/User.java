@@ -32,6 +32,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
 
+
+
     @PreRemove
     public void removeUser(){
         for (Setting s: settings) {

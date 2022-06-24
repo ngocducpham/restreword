@@ -1,5 +1,6 @@
 package com.example.restreword.service;
 
+import com.example.restreword.common.ResponseTemplate;
 import com.example.restreword.dto.UserInput;
 import com.example.restreword.dto.UserOutput;
 import com.example.restreword.dto.mapper.UserMapper;
@@ -10,6 +11,7 @@ import com.example.restreword.repo.SettingRepository;
 import com.example.restreword.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,8 +31,9 @@ public class UserService {
     }
 
     public UserOutput findOne(Integer id) {
-        return mapper.toOutputDto(userRepository.findById(id)
+       return mapper.toOutputDto(userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found: id-" + id)));
+
     }
 
     public Integer create(UserInput userInput) {

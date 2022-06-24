@@ -36,7 +36,7 @@ public class RestrewordApplication implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
 
-        //Setting setting = Setting.builder().key("theme").value("dark").build();
+        Setting setting = Setting.builder().key("theme").value("dark").build();
         User user = User.builder().name("Duc").birthDate(LocalDate.of(2001,10,1)).build();
         Post post = Post.builder().id(1).description("Hello").user(user).build();
         Post post2 = Post.builder().id(2).description("World").user(user).build();

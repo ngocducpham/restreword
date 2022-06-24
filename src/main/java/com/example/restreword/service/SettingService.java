@@ -1,5 +1,6 @@
 package com.example.restreword.service;
 
+import com.example.restreword.common.ResponseTemplate;
 import com.example.restreword.dto.SettingInput;
 import com.example.restreword.dto.SettingOutput;
 import com.example.restreword.dto.mapper.SettingMapper;
@@ -12,6 +13,7 @@ import com.example.restreword.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,7 +33,7 @@ public class SettingService {
         return mapper.toOutputDtos(getUser(userId).getSettings());
     }
 
-    public HttpStatus create(Integer userId, SettingInput settingInput) {
+    public  HttpStatus create(Integer userId, SettingInput settingInput) {
         boolean isConflictSetting = settingRepository.findByUserIdAndKey(userId, settingInput.getKey()) != null;
         if (isConflictSetting)
             return HttpStatus.CONFLICT;
@@ -45,7 +47,6 @@ public class SettingService {
             mappedSetting = setting;
             mappedSetting.getUsers().add(getUser(userId));
         }
-
 
         setting = settingRepository.saveAndFlush(mappedSetting);
         return HttpStatus.OK;
@@ -61,7 +62,6 @@ public class SettingService {
         Setting setting = settingRepository.findById(settingId).get();
         setting.setValue(settingInput.getValue());
         settingRepository.saveAndFlush(setting);
-
 
     }
 

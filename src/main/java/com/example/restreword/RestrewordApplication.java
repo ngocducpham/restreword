@@ -17,7 +17,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -32,22 +34,18 @@ public class RestrewordApplication implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(RestrewordApplication.class, args);
     }
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-
         Setting setting = Setting.builder().key("theme").value("dark").build();
-        String password = bCryptPasswordEncoder().encode("123");
+        String password = passwordEncoder.encode("123");
         User user = User.builder().name("Duc").password(password).birthDate(LocalDate.of(2001,10,1)).build();
         Post post = Post.builder().id(1).description("Hello").user(user).build();
         Post post2 = Post.builder().id(2).description("World").user(user).build();
@@ -56,7 +54,6 @@ public class RestrewordApplication implements CommandLineRunner {
         setting.setUsers(Arrays.asList(user));
         settingRepository.saveAndFlush(setting);
         roleRepository.saveAndFlush(role);
-        //userRepository.saveAndFlush(user);
         postRepository.saveAndFlush(post);
         postRepository.saveAndFlush(post2);
 

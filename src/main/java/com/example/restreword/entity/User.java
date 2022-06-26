@@ -1,4 +1,5 @@
 package com.example.restreword.entity;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,18 +29,18 @@ public class User {
 
     private LocalDate birthDate;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users", cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Setting> settings;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
 
     @PreRemove
-    public void removeUser(){
-        for (Setting s: settings) {
+    public void removeUser() {
+        for (Setting s : settings) {
             s.getUsers().remove(this);
         }
     }
@@ -58,7 +59,6 @@ public class User {
         }
     }
     */
-
 
 
 }

@@ -155,11 +155,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     // 500
 
-    @ExceptionHandler({Exception.class})
-    public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
-        logger.info(ex.getClass().getName());
-
-        return ResponseTemplate.fail("error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler({Exception.class})
+//    public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
+//        logger.info(ex.getClass().getName());
+//
+//        return ResponseTemplate.fail("error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
 }

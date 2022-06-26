@@ -1,5 +1,6 @@
 package com.example.restreword.security;
 
+import com.example.restreword.filter.ExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final AuthEntryPointJwt entryPointJwt;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -35,7 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
-                .authorizeHttpRequests().antMatchers("/api/auth/**").permitAll()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
+                .authorizeHttpRequests().antMatchers("/api/login/**").permitAll()
                 .and()
                 .authorizeHttpRequests().antMatchers("/api/admin/**").hasAnyAuthority("ADMIN")
                 .and()
@@ -44,8 +48,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests().anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPointJwt);
-
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

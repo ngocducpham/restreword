@@ -23,12 +23,7 @@ public class JwtUtil {
         return JWT.decode(token).getSubject();
     }
 
-    public static boolean validateToken(String token) {
-        try {
-            JWT.require(Algorithm.HMAC512(secret.getBytes())).build().verify(token);
-            return true;
-        } catch (JWTVerificationException e) {
-            return false;
-        }
+    public static void validateToken(String token) {
+        JWT.require(Algorithm.HMAC512(secret.getBytes())).build().verify(token);
     }
 }

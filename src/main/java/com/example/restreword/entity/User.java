@@ -29,7 +29,7 @@ public class User {
 
     private LocalDate birthDate;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Setting> settings;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users", cascade = CascadeType.REMOVE)

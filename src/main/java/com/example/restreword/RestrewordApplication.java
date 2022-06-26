@@ -46,7 +46,7 @@ public class RestrewordApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Setting setting = Setting.builder().key("theme").value("dark").build();
         String password = passwordEncoder.encode("123");
-        User user = User.builder().name("Duc").password(password).birthDate(LocalDate.of(2001,10,1)).build();
+        User user = User.builder().name("duc").password(password).birthDate(LocalDate.of(2001,10,1)).build();
         Post post = Post.builder().id(1).description("Hello").user(user).build();
         Post post2 = Post.builder().id(2).description("World").user(user).build();
         Role role = Role.builder().name("ADMIN").users(Arrays.asList(user)).build();

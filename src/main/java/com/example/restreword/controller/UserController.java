@@ -1,5 +1,6 @@
 package com.example.restreword.controller;
 
+import com.example.restreword.annotation.IsAdmin;
 import com.example.restreword.common.ResponseTemplate;
 import com.example.restreword.dto.UserInput;
 import com.example.restreword.repo.UserRepository;
@@ -21,6 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping()
+    @IsAdmin
     public ResponseEntity<Object> retrieveAllUsers() {
         return ResponseTemplate.success(userService.findAll());
     }
@@ -31,6 +33,7 @@ public class UserController {
     }
 
     @PostMapping()
+    @IsAdmin
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserInput user) {
         Integer responseTemplate = userService.create(user);
 
@@ -46,12 +49,14 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
+    @IsAdmin
     public ResponseEntity<Object> updateUser(@PathVariable Integer id, @Valid @RequestBody UserInput userInput) {
         userService.update(id, userInput);
         return ResponseTemplate.success();
     }
 
     @DeleteMapping("{id}")
+    @IsAdmin
     public ResponseEntity<Object> deleteUser(@PathVariable int id) {
         userService.delete(id);
         return ResponseTemplate.success();

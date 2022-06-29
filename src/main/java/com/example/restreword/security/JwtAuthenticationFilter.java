@@ -4,6 +4,8 @@ import com.example.restreword.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -28,12 +32,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null) {
             JwtUtil.validateToken(token);
             String username = JwtUtil.getUsernameFromToken(token);
-            UserDetails user = userDetailsService.loadUserByUsername(username);
+            Collection<GrantedAuthority> authorities = JwtUtil.getRolesFromToken(token).stream()
+                    .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            user,
+                            username,
                             null,
-                            user.getAuthorities());
+                            authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 

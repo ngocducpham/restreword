@@ -1,6 +1,5 @@
 package com.example.restreword.service;
 
-import com.example.restreword.common.ResponseTemplate;
 import com.example.restreword.dto.UserInput;
 import com.example.restreword.dto.UserOutput;
 import com.example.restreword.dto.mapper.UserMapper;
@@ -12,20 +11,12 @@ import com.example.restreword.repo.RoleRepository;
 import com.example.restreword.repo.SettingRepository;
 import com.example.restreword.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -50,7 +41,7 @@ public class UserService {
     public Integer create(UserInput userInput) {
         User user = mapper.inputToEntity(userInput);
         user.setPassword(passwordEncoder.encode(userInput.getPassword()));
-        Role role = Role.builder().name("USER").users(Arrays.asList(user)).build();
+        Role role = Role.builder().name("ROLE_USER").users(Arrays.asList(user)).build();
         roleRepository.saveAndFlush(role);
         return userRepository.saveAndFlush(user).getId();
     }

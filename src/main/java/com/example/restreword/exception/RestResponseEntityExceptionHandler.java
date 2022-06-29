@@ -2,9 +2,12 @@ package com.example.restreword.exception;
 
 import com.example.restreword.common.ResponseTemplate;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -17,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
@@ -114,6 +118,31 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return ResponseTemplate.fail(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    // lỗi query insert, update
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    public ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+
+        return ResponseTemplate.fail(ex.getMessage().split(";")[0], HttpStatus.BAD_REQUEST);
+    }
+
+    // loi sai tai khoan mat khau
+    // BadCredentialsException
+    @ExceptionHandler({BadCredentialsException.class})
+    public ResponseEntity<Object> handleBadCredentialsException(final DataIntegrityViolationException ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+
+        return ResponseTemplate.fail(ex.getMessage().split(";")[0], HttpStatus.UNAUTHORIZED);
+    }
+
+    // loi access denied cua acl
+    // ExceptionHandlerExceptionResolver
+    @ExceptionHandler({AccessDeniedException.class})
+    public ResponseEntity<Object> handleAccessDeniedException(final DataIntegrityViolationException ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+
+        return ResponseTemplate.fail(ex.getMessage().split(";")[0], HttpStatus.FORBIDDEN);
+    }
     // 404
 
     @Override
@@ -155,11 +184,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     // 500
 
-//    @ExceptionHandler({Exception.class})
-//    public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
-//        logger.info(ex.getClass().getName());
-//
-//        return ResponseTemplate.fail("error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
+        logger.info(ex.getClass().getName());
+
+        return ResponseTemplate.fail("error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }

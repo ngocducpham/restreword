@@ -1,5 +1,6 @@
 package com.example.restreword.controller;
 
+import com.example.restreword.annotation.IsBothAdminUser;
 import com.example.restreword.common.ResponseTemplate;
 import com.example.restreword.dto.PostInput;
 import com.example.restreword.dto.PostOutput;

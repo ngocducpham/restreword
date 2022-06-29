@@ -46,16 +46,24 @@ public class RestrewordApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Setting setting = Setting.builder().key("theme").value("dark").build();
         String password = passwordEncoder.encode("123");
-        User user = User.builder().name("duc").password(password).birthDate(LocalDate.of(2001,10,1)).build();
+        User user = User.builder().name("editor").password(password).birthDate(LocalDate.of(2001,10,1)).build();
         Post post = Post.builder().id(1).description("Hello").user(user).build();
         Post post2 = Post.builder().id(2).description("World").user(user).build();
-        Role role = Role.builder().name("ADMIN").users(Arrays.asList(user)).build();
+        Role role = Role.builder().name("ROLE_EDITOR").users(Arrays.asList(user)).build();
+
+        User user1 = User.builder().name("admin").password(password).birthDate(LocalDate.of(2001,10,1)).build();
+        Role role1 = Role.builder().name("ROLE_ADMIN").users(Arrays.asList(user1)).build();
+
+        User user2 = User.builder().name("hr").password(password).birthDate(LocalDate.of(2001,10,1)).build();
 
         setting.setUsers(Arrays.asList(user));
         settingRepository.saveAndFlush(setting);
         roleRepository.saveAndFlush(role);
+        roleRepository.save(role1);
         postRepository.saveAndFlush(post);
         postRepository.saveAndFlush(post2);
+        userRepository.saveAndFlush(user1);
+        userRepository.saveAndFlush(user2);
 
 
         //user.setSettings(Arrays.asList(setting));

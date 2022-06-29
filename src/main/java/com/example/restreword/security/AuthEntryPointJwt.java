@@ -1,9 +1,8 @@
 package com.example.restreword.security;
 
 import com.example.restreword.common.ResponseTemplate;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.MediaType;
+import com.example.restreword.utils.AppUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -18,11 +17,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         ResponseTemplate<Object> responseTemplate = new ResponseTemplate<>(false, authException.getMessage(), null);
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        mapper.writeValue(response.getOutputStream(), responseTemplate);
+        AppUtil.writeResponse(response, responseTemplate, HttpStatus.UNAUTHORIZED);
     }
 }
